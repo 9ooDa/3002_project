@@ -1,5 +1,3 @@
-# Logistic Regression
-from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import make_regression
 import pandas as pd
 import numpy as np
@@ -60,6 +58,8 @@ X_train, X_val_and_test, Y_train, Y_val_and_test = train_test_split(X_scale, Y, 
 X_val, X_test, Y_val, Y_test = train_test_split(X_val_and_test, Y_val_and_test, test_size=0.5)
 
 # fit final model
+# Logistic Regression
+from sklearn.linear_model import LogisticRegression
 model = LogisticRegression()
 Y_train = Y_train.astype('int')
 model.fit(X_train, Y_train)

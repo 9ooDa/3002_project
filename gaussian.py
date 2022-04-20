@@ -1,6 +1,3 @@
-
-# Gaussian NB
-from sklearn.naive_bayes import GaussianNB
 from sklearn.datasets import make_regression
 import pandas as pd
 import numpy as np
@@ -57,10 +54,11 @@ Y = np.asarray(Y).astype('float32')
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scale = min_max_scaler.fit_transform(X)
 X_train, X_val_and_test, Y_train, Y_val_and_test = train_test_split(X_scale, Y, test_size=0.3)
-# X_train, X_val_and_test, Y_train, Y_val_and_test = train_test_split(X, Y, test_size=0.3)
 X_val, X_test, Y_val, Y_test = train_test_split(X_val_and_test, Y_val_and_test, test_size=0.5)
 
 # fit final model
+# Gaussian NB
+from sklearn.naive_bayes import GaussianNB
 model = GaussianNB()
 Y_train = Y_train.astype('int')
 model.fit(X_train, Y_train)
@@ -71,13 +69,10 @@ y_mean = y_sum / len(Y_test)
 ssr = 0
 sst = 0
 ynew = model.predict(X_test)
-
 for i in range(len(X_test)):
     print("X= {}, True_Y= {} ,Predicted= {}".format(X_test[i], Y_test[i] ,ynew[i]))
-
 from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = model, X = X_train, y = Y_train, cv = 8)
-print("Accuracy:",accuracies.mean())
+accuracies = cross_val_score(estimator = model, X = X_train, y = Y_train, cv = 10)
+print("Accuracy(cross validation):",accuracies.mean())
 print("Std",accuracies.std())
-
 print("Accuracy Score:", model.score(X_test,Y_test))
