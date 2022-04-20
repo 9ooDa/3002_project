@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-df = pd.read_csv('Train.csv')
+df = pd.read_csv('Test.csv')
 df = df.fillna(0)
 
 df['Gender'] = df['Gender'].replace(['Male'],0)
@@ -27,10 +27,6 @@ df['Profession'] = df['Profession'].replace(['Lawyer'],7)
 df['Profession'] = df['Profession'].replace(['Entertainment'],8)
 df['Profession'] = df['Profession'].replace(['Homemaker'],9)
 
-# df['Spending_Score'] = df['Spending_Score'].replace(['Low'],1)
-# df['Spending_Score'] = df['Spending_Score'].replace(['Average'],2)
-# df['Spending_Score'] = df['Spending_Score'].replace(['High'],3)
-
 df['Var_1'] = df['Var_1'].replace(['Cat_1'],1)
 df['Var_1'] = df['Var_1'].replace(['Cat_2'],2)
 df['Var_1'] = df['Var_1'].replace(['Cat_3'],3)
@@ -38,11 +34,6 @@ df['Var_1'] = df['Var_1'].replace(['Cat_4'],4)
 df['Var_1'] = df['Var_1'].replace(['Cat_5'],5)
 df['Var_1'] = df['Var_1'].replace(['Cat_6'],6)
 df['Var_1'] = df['Var_1'].replace(['Cat_7'],7)
-
-df['Segmentation'] = df['Segmentation'].replace(['A'],1)
-df['Segmentation'] = df['Segmentation'].replace(['B'],2)
-df['Segmentation'] = df['Segmentation'].replace(['C'],3)
-df['Segmentation'] = df['Segmentation'].replace(['D'],4)
 
 for i, row in df.iterrows():
     sp_val = 0
@@ -52,39 +43,18 @@ for i, row in df.iterrows():
         sp_val = random.randrange(34, 67)
     elif row['Spending_Score'] == 'High':
         sp_val = random.randrange(67, 100)
-
     df.at[i,'Spending_Score'] = sp_val
 
 print(df['Spending_Score'])
 data = df[['Age','Spending_Score']]
-
 scaler = MinMaxScaler()
 data_scale = scaler.fit_transform(data)
-
-# from sklearn.preprocessing import StandardScaler
-# scaler = StandardScaler()
-# data_scale = scaler.fit_transform(data)
-
-# def z_score_normalize(lst):
-#     normalized = []
-
-#     for value in lst:
-#         normalized_num = (value - np.mean(lst)) / np.std(lst)
-#         normalized.append(normalized_num)
-
-#     return normalized
-# data_scale = z_score_normalize(data)
-
 k = 4
-
 model = KMeans(n_clusters = k, random_state = 10)
-
 model.fit(data_scale)
-
 df['cluster'] = model.fit_predict(data_scale)
 
 plt.figure(figsize = (8,8))
-
 for i in range(k):
     plt.scatter(df.loc[df['cluster'] == i, 'Age'], df.loc[df['cluster']==i, 'Spending_Score'],label = 'cluster' + str(i))
 
@@ -93,9 +63,3 @@ plt.title('K = %d results'%k, size = 15)
 plt.xlabel('Age', size = 12)
 plt.ylabel('Spending Score', size = 12)
 plt.show()
-
-# from yellowbrick.cluster import KElbowVisualizer
-
-# model = KMeans()
-# visualizer = KElbowVisualizer(model, k=(1,10))
-# visualizer.fit(data_scale)
